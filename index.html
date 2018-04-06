@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MTG Proxy Generator</title>
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="print.css">
+</head>
+
+<body>
+  <header class="no-print">
+    <h1>Generate MTG proxies:</h1>
+  </header>
+  
+  <section class="disclaimer">
+    <h2 class="terms">This APP is for creating proxy-versions of cards you already own or are intending to purchase. You may not use this site for profit in any way. All images are property of WoTC and of their respecitive artist. Read about WoTC's official stance on proxies <a href="https://magic.wizards.com/en/articles/archive/news/proxies-policy-and-communication-2016-01-14" target="blank">here</a>.</h2>
+    <h3 class="terms">Do you accept?</h2>
+    <input class="accept-terms" type="checkbox">
+  </section>
+  
+  <section class="js-input-section">
+    <textarea class="js-queryList" placeholder="Format:
+                                               
+Island
+3 Island
+2 Kytheon, Hero of Akros"></textarea>
+    <button type="submit" class="js-generate-button">Generate</button>
+  </section>
+  
+  <section class="js-results">
+    <div id="loading-stuff">Querying <span id="current-query">0</span> of <span id="total-queries">0</span></div>
+  </section>
+  
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
