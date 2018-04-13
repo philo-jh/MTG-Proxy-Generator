@@ -1,42 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MTG Proxy Generator</title>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://png.icons8.com/ios/50/000000/mana-filled.png">
+
+    <title>MTG Proxy Generator</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel-stylesheet href="/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="print.css">
-</head>
+  </head>
 
-<body>
-  <header class="no-print">
-    <h1>Generate MTG proxies:</h1>
-  </header>
-  
-  <section class="disclaimer">
-    <h2 class="terms">This APP is for creating proxy-versions of cards you already own or are intending to purchase. You may not use this site for profit in any way. All images are property of WoTC and of their respecitive artist. Read about WoTC's official stance on proxies <a href="https://magic.wizards.com/en/articles/archive/news/proxies-policy-and-communication-2016-01-14" target="blank">here</a>.</h2>
-    <h3 class="terms">Do you accept?</h2>
-    <input class="accept-terms" type="checkbox">
-  </section>
-  
-  <section class="js-input-section">
-    <textarea class="js-queryList" placeholder="Format:
-                                               
-Island
-3 Island
-2 Kytheon, Hero of Akros"></textarea>
-    <button type="submit" class="js-generate-button">Generate</button>
-  </section>
-  
-  <section class="js-results">
-    <div id="loading-stuff">Querying <span id="current-query">0</span> of <span id="total-queries">0</span></div>
-  </section>
-  
-  <script
+  <body class="text-center">
+
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+      
+      <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="index.html">
+          <img class = "home-icon" src="https://png.icons8.com/ios/50/000000/mana-filled.png" width="30" height="30" class="d-inline-block align-top" alt="">MTG Deck Tester</a>
+      </nav>
+
+      <main role="main" class="inner cover">
+        <section class="disclaimer">
+          <div class="jumbotron">
+            <h1 class="display-4">Generate MTG Proxies</h1>
+            <p class="lead">This APP is for creating proxy-versions of cards you already own or are intending to purchase. You may not use this site for profit in any way. All images are property of WoTC and their respecitive artist. </p>
+            <hr class="my-4">
+            <p>Read about WoTC's official stance on proxies <a href="https://magic.wizards.com/en/articles/archive/news/proxies-policy-and-communication-2016-01-14" target="blank">here</a>.</p>
+            <button type="button" class="accept-terms btn btn-success btn-lg">I Agree</button>
+          </div>
+        </section>
+        
+        <section class="js-input-section">
+          <textarea class="js-queryList form-control" placeholder="4 Black Lotus (One card name per line)"></textarea>
+          <button class="btn btn-primary js-generate-button" type="submit">Generate</button>
+        </section>
+        
+        <section class="js-results row no-gutters">
+          
+          <div class="progress-container w-100 p-0">
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </div>
+        </section>
+        
+      </main>
+      
+      <footer class="mastfoot mt-auto">
+        <div class="inner">
+          <p>Using the insanely good <a href="https://scryfall.com/" target="blank">ScryFall</a> API</p>
+        </div>
+        <div class="inner">
+          <a href="https://icons8.com" target="blank">Icon pack by Icons8</a>
+        </div>
+      </footer>
+    </div>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>window.jQuery || document.write('<script src="https://code.jquery.com/jquery-3.3.1.min.js"><\/script>')</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
   <script src="index.js"></script>
-</body>
+  </body>
 </html>

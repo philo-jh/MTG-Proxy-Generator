@@ -1,17 +1,7 @@
-@media print
-{    
-    .no-print, .no-print *
-    {
-        display: none !important;
-    }
+@media only print {
   
-  .card-face-div:hover {
-    -webkit-transform: scale(1, 1);
-    transform: scale(1, 1);
+  .card-face-div {
+    width: 224px;
   }
   
-  .card-overlay {
-    display: none;
-  }
-
 }
