@@ -119,3 +119,7 @@ img {
 .edit-mode {
   opacity: 1;
 }
+
+ul {
+  padding: 0;
+}
