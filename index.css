@@ -12,79 +12,80 @@ img {
 
 @media not print {
   
-  .card-face-div {
-  transition: all 0.3s ease-in-out;
-}
+    .card-face-div {
+      transition: all 0.3s ease-in-out;
+  }
 
-.card-face-div::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
+  .card-face-div::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    -webkit-transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+    
+  .card-face-div:hover {
+    -webkit-transform: scale(1.05, 1.05);
+    transform: scale(1.05, 1.05);
+  }
 
-.card-face-div:hover {
-  -webkit-transform: scale(1.05, 1.05);
-  transform: scale(1.05, 1.05);
-}
-
-.card-face-div::after {
-  opacity: 1;
-}
-
-.card-overlay {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 5;
-  opacity: 0;
-  transition: 0.5s all ease-in-out;
-  background-color: rgb(0, 0, 0, 0.30);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.card-overlay:hover {
-  opacity: 1;
-}
-
-.set-name {
-  position: absolute;
-  top: 0;
-}
-
-.image-counter {
-  position: absolute;
-  bottom: 10px;
-  font-size: 15px;
-}
-
-.prev-button {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-}
-
-.next-button {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-}
-
-.js-generate-button {
-  display: block;
-  margin-top: 10px;
-}
+  .card-overlay:hover {
+    opacity: 1;
+  }
   
+  .card-face-div::after {
+    opacity: 1;
+  }
+
+  .card-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    opacity: 0;
+    transition: 0.5s all ease-in-out;
+    background-color: rgb(0, 0, 0, 0.30);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  
+
+  .set-name {
+    position: absolute;
+    top: 0;
+  }
+
+  .image-counter {
+    position: absolute;
+    bottom: 10px;
+    font-size: 15px;
+  }
+
+  .prev-button {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+  }
+
+  .next-button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+
+  .js-generate-button {
+    display: block;
+    margin-top: 10px;
+  }
 }
 
 .home-icon {
@@ -109,4 +110,12 @@ img {
 
 .jumbotron {
   margin-top: 15px;
+}
+
+.js-edit-list:hover, .js-review-deck:hover {
+  cursor: pointer;
+}
+
+.edit-mode {
+  opacity: 1;
 }

@@ -9,9 +9,10 @@
 
     <title>MTG Proxy Generator</title>
 
+    
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <link rel-stylesheet href="/bootstrap/css/bootstrap.min.css">
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" media="screen">
   <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="print.css">
   </head>
@@ -20,9 +21,13 @@
 
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
       
-      <nav class="navbar navbar-light bg-light">
+      <nav class="navbar navbar-light bg-light d-print-none" style="background-color: #e3f2fd;">
         <a class="navbar-brand" href="index.html">
           <img class = "home-icon" src="https://png.icons8.com/ios/50/000000/mana-filled.png" width="30" height="30" class="d-inline-block align-top" alt="">MTG Deck Tester</a>
+        <ul>
+          <li class="navbar-text js-edit-list text-warning">Edit List |</li>
+          <li class ="navbar-text js-review-deck text-info">Review Deck</li>
+        </ul>
       </nav>
 
       <main role="main" class="inner cover">
@@ -42,12 +47,6 @@
         </section>
         
         <section class="js-results row no-gutters">
-          
-          <div class="progress-container w-100 p-0">
-            <div class="progress">
-              <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-          </div>
         </section>
         
       </main>

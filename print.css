@@ -1,7 +1,32 @@
 @media only print {
   
+  html, body {
+    height: auto;
+    margin: 0;
+  }
+  
+  .d-print-none {
+    display: none;
+  }
+  
+  @page {
+    size: auto;
+    margin-top: 0.1in;
+    margin-left: 01.in;
+    margin-bottom: 0;
+    margin-right: 0;
+  }
+  
   .card-face-div {
-    width: 224px;
+    page-break-inside: avoid;
+    width: 230px;
+    display:inline-block;
+  }
+  
+  .js-results.row {
+    display: block !important;
+    width: 100%;
+    font-size: 0;
   }
   
 }

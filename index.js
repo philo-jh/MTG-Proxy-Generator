@@ -17,10 +17,10 @@ let STATE = {
 
 function setState(stateFunction) {
   STATE = stateFunction(STATE);
-  renderAppliction(STATE);
+  renderApplication(STATE);
 }
 
-function renderAppliction(state) {
+function renderApplication(state) {
   
   if(state.mode === MODES.DISCLAIMER) {
     showDisclaimer();
@@ -29,6 +29,15 @@ function renderAppliction(state) {
       
       setState(oldState => {
         oldState.mode = MODES.EDIT;
+        
+        $(".js-edit-list").click(function() {
+          showEditScreen();
+        });
+
+        $(".js-review-deck").click(function() {
+          showReviewScreen();
+        });
+        
         return oldState;
       });
     });
@@ -40,10 +49,11 @@ function renderAppliction(state) {
     $(".js-generate-button").click(function(event) {
       event.preventDefault();
       
+      $(".js-results").empty();
+      addProgressBar();
+      
       //generate a list of query...
       queryList = generateQueryList($(".js-queryList").val().split("\n"));
-      console.log("Initial queryList:");
-      console.log(queryList);
       
       //set the loading counter for total queries
       const totalRequests = queryList.length;
@@ -56,7 +66,6 @@ function renderAppliction(state) {
       for(let i=0; i < queryList.length; i++) {
         //query ScryFall for CURRENT card
         getDataFromScryFall(queryList[i], function(data) {
-          console.log(`Querying ScryFall, i=${i}, card=${queryList[i].name}`);
 
           const card = {}
 
@@ -66,11 +75,10 @@ function renderAppliction(state) {
           card.alternateImages = null;
           card.editMode = false;
           card.printsUri = data.prints_search_uri;
+          card.isHover = false;
 
           //update card images:
           if(data.layout === "transform") {
-
-              console.log(`Encountered double-faced card: ${card.name}`);
             
               card.cardFaces = 2;
 
@@ -79,16 +87,14 @@ function renderAppliction(state) {
               card.cardImage2 = (data.card_faces[1].image_uris) ? data.card_faces[1].image_uris.border_crop : "http://via.placeholder.com/224x317";
 
           } else {
-
-            console.log(`Updating card image: ${card.name}`);
             
             card.cardFaces = 1;
 
             card.cardImage = (data.image_uris) ? data.image_uris.border_crop : "http://via.placeholder.com/224x317";
 
           }
-
-          console.log("Completed requests: " + ++completedRequests);
+          
+          completedRequests++;
           
           let percentageComplete = (completedRequests / totalRequests) * 100;
           
@@ -103,24 +109,21 @@ function renderAppliction(state) {
           }
 
           if(completedRequests === queryList.length) {
-            renderAppliction(STATE);
+            STATE.deckList = STATE.deckList.sort(function(card1, card2) {
+              return card1.displayOrder - card2.displayOrder;
+            });
+            renderApplication(STATE);
           }
         });
       }
-      
-      console.log("Setting state MODE to REVIEW");
       STATE.mode = MODES.REVIEW;
     });
     
   } else if(state.mode === MODES.REVIEW) {
+    
     $(".progress-container").remove();
     
-    const sortedDeckList = STATE.deckList.sort(function(card1, card2) {
-      return card1.displayOrder - card2.displayOrder;
-    });
-    
-    buildSpoiler(sortedDeckList);
-    console.log(STATE.deckList);
+    buildSpoiler(STATE.deckList);
   
   } else {
     throw new Error("Invalid Mode");
@@ -174,13 +177,14 @@ function buildSpoiler(deckList) {
     
     if(card.needsRerender) {
       const divHTML = `
-          <div class="card-overlay d-print-none">
+          <div class="card-overlay d-print-none ${(card.editMode) ? `edit-mode` : ""}">
 
             ${(card.editMode) ? `<span class="set-name badge badge-dark">${card.set}</span>` : ""}
 
             ${(card.editMode) ? `<button class="done-button btn btn-outline-light btn-sm">Done</button>` : ""}
             
             ${(card.editMode) ? `<button class="prev-button btn btn-dark btn-sm"> < </button>` : ""}
+
 
             ${(card.editMode) ? `<span class="badge badge-dark image-counter"><span class="image-counter-current">${card.alternateImages.map(item => item.cardImage).indexOf(card.cardImage) + 1}</span> / <span class="image-counter-total">${card.alternateImages.length}</span></span>` : `<button class="edit-button btn btn-outline-light btn-sm">Edit</button>`}
 
@@ -198,7 +202,9 @@ function buildSpoiler(deckList) {
       }
       
       $(".edit-button", cardFaceDiv1).click(function() {
-        card.editMode = true;
+        card.editMode = true; 
+        
+        $(this).parent().css("opacity", "1");
         
         if(!card.alternateImages) {
           $.getJSON(card.printsUri, null, function(resultData) {
@@ -213,6 +219,9 @@ function buildSpoiler(deckList) {
                 return alternateImage;
               });
               
+              card.needsRerender = true;
+              renderApplication(STATE);
+              
             } else {
               
               card.alternateImages = resultData.data.map(function(item) {
@@ -221,23 +230,23 @@ function buildSpoiler(deckList) {
                 alternateImage.set =  item.set_name;
                 return alternateImage;
               });
+              
+              card.needsRerender = true;
+              renderApplication(STATE);
             }
-            
-            card.needsRerender = true;
-            renderAppliction(STATE);
           });
           
         } else {
           
           card.needsRerender = true;
-          renderAppliction(STATE);
+          renderApplication(STATE);
         }
       });
       
       $(".done-button").click(function() {
         card.editMode = false;
         card.needsRerender = true;
-        renderAppliction(STATE);
+        renderApplication(STATE);
       });
       
       $(".next-button").click(function() {
@@ -257,7 +266,7 @@ function buildSpoiler(deckList) {
           }
           
           card.needsRerender = true;
-          renderAppliction(STATE);
+          renderApplication(STATE);
         }
       });
       
@@ -277,7 +286,7 @@ function buildSpoiler(deckList) {
           }
           
           card.needsRerender = true;
-          renderAppliction(STATE);
+          renderApplication(STATE);
         }
       });
       
@@ -362,7 +371,17 @@ function showReviewScreen() {
   $("footer").prop('hidden', true);
 }
 
+function addProgressBar() {
+  $(".js-results").append(`
+    <div class="progress-container w-100 p-0">
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+    </div>
+  `);
+}
+
 
 $(function() {
-  renderAppliction(STATE);
+  renderApplication(STATE);
 });
