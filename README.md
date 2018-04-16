@@ -10,4 +10,4 @@ Ever wondered how your deck would play if you just had those couple of cards? No
 ## Choose Whatever Print Your Heart Desires!
 ![review screen](Screenshots/2.png)
 ## Technology Used:
-This app was built with HTML, CSS, Javascript, jQuery, and Bootstrap. Thanks to the awesome ScryFall API for the awesome database!
+This app was built with HTML, CSS, Javascript, jQuery, and Bootstrap. Thanks to the awesome ScryFall API for the database!
