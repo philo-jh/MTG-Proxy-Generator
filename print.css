@@ -11,15 +11,15 @@
   
   @page {
     size: auto;
-    margin-top: 0.1in;
-    margin-left: 01.in;
+    margin-top: 0.25in;
+    margin-left: 0.25in;
     margin-bottom: 0;
     margin-right: 0;
   }
   
   .card-face-div {
     page-break-inside: avoid;
-    width: 230px;
+    width: 2.45in;
     display:inline-block;
   }
   

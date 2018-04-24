@@ -8,9 +8,6 @@
     <link rel="icon" href="https://png.icons8.com/ios/50/000000/mana-filled.png">
 
     <title>MTG Proxy Generator</title>
-
-    
-    <!-- Bootstrap core CSS -->
     
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous" media="screen">
   <link rel="stylesheet" href="index.css">
@@ -24,26 +21,26 @@
       <nav class="navbar navbar-light bg-light d-print-none" style="background-color: #e3f2fd;">
         <a class="navbar-brand" href="index.html">
           <img class = "home-icon" src="https://png.icons8.com/ios/50/000000/mana-filled.png" width="30" height="30" class="d-inline-block align-top" alt="">MTG Deck Tester</a>
-        <ul>
-          <li class="navbar-text js-edit-list text-warning">Edit |</li>
-          <li class ="navbar-text js-review-deck text-info">Review</li>
-        </ul>
+        <ul class="edit-review"></ul>
       </nav>
 
       <main role="main" class="inner cover">
         <section class="disclaimer">
           <div class="jumbotron">
-            <h1 class="display-4">Generate MTG Proxies</h1>
-            <p class="lead">This APP is for creating proxy-versions of cards you already own or are intending to purchase. You may not use this site for profit in any way. All images are property of WoTC and their respecitive artist. </p>
+            <h1 class="display-4">Print Proxy-Cards for Magic the Gathering</h1>
+            <p class="lead">This APP allows you to print test-versions of cards for the ultra-popular trading card game, Magic the Gathering. Playtest cards you are interested in before purchasing or protect valuable originals you already own.</p>
             <hr class="my-4">
-            <p>Read about WoTC's official stance on proxies <a href="https://magic.wizards.com/en/articles/archive/news/proxies-policy-and-communication-2016-01-14" target="blank">here</a>.</p>
-            <button type="button" class="accept-terms btn btn-success btn-lg">I Agree</button>
+            <button type="button" class="accept-terms btn btn-success btn-lg">Get Started</button>
+            
           </div>
         </section>
         
         <section class="js-input-section">
-          <textarea class="js-queryList form-control" placeholder="4 Black Lotus (One card name per line)"></textarea>
-          <button class="btn btn-primary js-generate-button" type="submit">Generate</button>
+          <form>
+            <textarea class="js-queryList form-control centered" placeholder-x=""></textarea>
+            <button class="btn btn-primary js-generate-button centered" type="submit">Generate</button>
+            <button class="btn btn-danger js-clear-button centered" type="button">Clear</button>
+          </form>
         </section>
         
         <section class="js-results row no-gutters">
@@ -53,18 +50,18 @@
       
       <footer class="mastfoot mt-auto">
         <div class="inner">
-          <p>Using the insanely good <a href="https://scryfall.com/" target="blank">ScryFall</a> API</p>
+          <p>Read about WoTC's official stance on proxies <a href="https://magic.wizards.com/en/articles/archive/news/proxies-policy-and-communication-2016-01-14" target="blank">here</a>. You may not use this site for profit in any way. All images are property of WoTC and their respecitive artist.</p>
         </div>
         <div class="inner">
+          <p>Using the insanely good <a href="https://scryfall.com/" target="blank">ScryFall</a> API</p>
           <a href="https://icons8.com" target="blank">Icon pack by Icons8</a>
+        </div>
+        <div class="inner">
+          <p>Created by <a href="https://github.com/philo-jh">Jacob Houser</a>.</p>
         </div>
       </footer>
     </div>
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    
     <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -72,6 +69,7 @@
   <script>window.jQuery || document.write('<script src="https://code.jquery.com/jquery-3.3.1.min.js"><\/script>')</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+  <script src="jquery.placeholder.js"></script>
   <script src="index.js"></script>
   </body>
 </html>

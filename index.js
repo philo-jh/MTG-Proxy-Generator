@@ -10,6 +10,27 @@ const MODES = {
 
 const SCRYFALL_SEARCH_URL = "https://api.scryfall.com/cards/named";
 
+const sampleDecklist = `4 Thalia's Lieutenant
+4 Champion of the Parish
+3 Thalia, Guardian of Thraben
+1 Thalia, Heretic Cathar
+1 Thraben Inspector
+3 Phantasmal Image
+1 Dark Confidant
+4 Kitesail Freebooter
+1 Kessig Malcontents
+4 Noble Hierarch
+4 Mantis Rider
+3 Meddling Mage
+4 Reflector Mage
+4 Aether Vial
+4 Ancient Ziggurat
+4 Cavern of Souls
+4 Horizon Canopy
+1 Plains
+2 Seachrome Coast
+4 Unclaimed Territory`;
+
 let STATE = {
   mode : MODES.DISCLAIMER,
   deckList : null
@@ -26,43 +47,42 @@ function renderApplication(state) {
     showDisclaimer();
     
     $(".accept-terms").click(function() {
-      
       setState(oldState => {
         oldState.mode = MODES.EDIT;
-        
-        $(".js-edit-list").click(function() {
-          showEditScreen();
-        });
-
-        $(".js-review-deck").click(function() {
-          showReviewScreen();
-        });
-        
         return oldState;
       });
     });
   } 
   
   else if(state.mode === MODES.EDIT) {
+    
+    $(".js-queryList").attr("placeholder-x", 
+`Here's an example decklist:\n\n` + sampleDecklist);
+    
+    $(".js-queryList").placeholder();
     showEditScreen();
     
     $(".js-generate-button").click(function(event) {
       event.preventDefault();
       
+      if (!$.trim($(".js-queryList").val())) {
+        $(".js-queryList").val(sampleDecklist);
+      }
+      
       $(".js-results").empty();
       addProgressBar();
-      
+
       //generate a list of query...
       queryList = generateQueryList($(".js-queryList").val().split("\n"));
-      
+
       //set the loading counter for total queries
       const totalRequests = queryList.length;
-      
+
       let completedRequests = 0;
       showReviewScreen();
-      
+
       STATE.deckList = [];
-      
+
       for(let i=0; i < queryList.length; i++) {
         //query ScryFall for CURRENT card
         getDataFromScryFall(queryList[i], function(data) {
@@ -75,55 +95,76 @@ function renderApplication(state) {
           card.alternateImages = null;
           card.editMode = false;
           card.printsUri = data.prints_search_uri;
-          card.isHover = false;
 
           //update card images:
           if(data.layout === "transform") {
-            
-              card.cardFaces = 2;
 
-              card.cardImage = (data.card_faces[0].image_uris) ? data.card_faces[0].image_uris.border_crop : "http://via.placeholder.com/224x317";
+              card.cardImage = (data.card_faces[0].image_uris) ? data.card_faces[0].image_uris.border_crop : ""
 
-              card.cardImage2 = (data.card_faces[1].image_uris) ? data.card_faces[1].image_uris.border_crop : "http://via.placeholder.com/224x317";
+              card.cardImage2 = (data.card_faces[1].image_uris) ? data.card_faces[1].image_uris.border_crop : "";
 
           } else {
-            
-            card.cardFaces = 1;
 
-            card.cardImage = (data.image_uris) ? data.image_uris.border_crop : "http://via.placeholder.com/224x317";
+            card.cardImage = (data.image_uris) ? data.image_uris.border_crop : "";
 
           }
-          
+
           completedRequests++;
-          
+
           let percentageComplete = (completedRequests / totalRequests) * 100;
-          
+
           $(".progress-bar").css("width", `${percentageComplete}%`).attr("aria-valuenow", `${percentageComplete}`);
-          
+
           card.needsRerender = true;
-
-          //push the cards into the deckList:
-          for(let j =0; j < queryList[i].quantity; j++) {
-            const myTempCard = $.extend(true, {}, card);
-            STATE.deckList.push(myTempCard);
+          
+          if(card.cardImage!=="") {
+            //push the cards into the deckList:
+            for(let j =0; j < queryList[i].quantity; j++) {
+              const myTempCard = $.extend(true, {}, card);
+              STATE.deckList.push(myTempCard);
+            }
+          } else {
+            $(".js-results").prepend(`<div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
+              "${card.name}" could not be found. Try editing your list.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>`);
           }
-
+          
           if(completedRequests === queryList.length) {
             STATE.deckList = STATE.deckList.sort(function(card1, card2) {
               return card1.displayOrder - card2.displayOrder;
             });
+
             renderApplication(STATE);
           }
         });
       }
+        
       STATE.mode = MODES.REVIEW;
+      
+    });
+    
+    $(".js-clear-button").click(function() {
+      $(".js-queryList").val("");
+      $(".js-queryList").scrollTop();
+    });
+    
+    $(".js-review-button").click(function() {
+      STATE.mode = MODES.REVIEW;
+      editButton();
+      renderApplication(STATE);
     });
     
   } else if(state.mode === MODES.REVIEW) {
     
+    showReviewScreen();
+    
     $(".progress-container").remove();
     
     buildSpoiler(STATE.deckList);
+    editButton();
   
   } else {
     throw new Error("Invalid Mode");
@@ -173,8 +214,6 @@ function buildSpoiler(deckList) {
         cardFaceDiv2 = $(cardFaceDivs[1]);
       }
     
-    
-    
     if(card.needsRerender) {
       const divHTML = `
           <div class="card-overlay d-print-none ${(card.editMode) ? `edit-mode` : ""}">
@@ -184,7 +223,6 @@ function buildSpoiler(deckList) {
             ${(card.editMode) ? `<button class="done-button btn btn-outline-light btn-sm">Done</button>` : ""}
             
             ${(card.editMode) ? `<button class="prev-button btn btn-dark btn-sm"> < </button>` : ""}
-
 
             ${(card.editMode) ? `<span class="badge badge-dark image-counter"><span class="image-counter-current">${card.alternateImages.map(item => item.cardImage).indexOf(card.cardImage) + 1}</span> / <span class="image-counter-total">${card.alternateImages.length}</span></span>` : `<button class="edit-button btn btn-outline-light btn-sm">Edit</button>`}
 
@@ -369,6 +407,20 @@ function showReviewScreen() {
   $(".js-input-section").prop('hidden', true);
   $(".js-results").prop('hidden', false);
   $("footer").prop('hidden', true);
+}
+
+function editButton() {
+  $(".edit-review").html(`<li class="navbar-text js-edit-button text-warning">Edit</li>`);
+  
+  $(".js-edit-button").click(function() {
+    STATE.mode = MODES.EDIT;
+    reviewButton();
+    renderApplication(STATE);
+  });
+}
+
+function reviewButton() {
+  $(".edit-review").html(`<li class ="navbar-text js-review-button text-info">Review</li>`);
 }
 
 function addProgressBar() {

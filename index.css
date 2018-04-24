@@ -3,9 +3,12 @@ img {
   width: 100%;
 }
 
+form {
+  margin: 0 auto;
+}
+
 .js-queryList {
   resize: none;
-  width: 300px;
   height: 350px;
   margin-top: 15px;
 }
@@ -82,8 +85,8 @@ img {
     right: 10px;
   }
 
-  .js-generate-button {
-    display: block;
+  button {
+    display: inline-block;
     margin-top: 10px;
   }
 }
@@ -112,7 +115,7 @@ img {
   margin-top: 15px;
 }
 
-.js-edit-list:hover, .js-review-deck:hover {
+.js-edit-button:hover, .js-review-button:hover {
   cursor: pointer;
 }
 
@@ -122,5 +125,18 @@ img {
 
 ul {
   padding: 0;
+}
+
+.centered {
+  margin: 0 auto;
+}
+
+.js-generate-button, .js-clear-button {
+  margin-top: 15px;
+  display: inline-block;
+}
+
+.close {
+  margin-top: 0;
 }
 
