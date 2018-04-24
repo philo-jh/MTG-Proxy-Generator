@@ -73,7 +73,7 @@ function renderApplication(state) {
       addProgressBar();
 
       //generate a list of query...
-      queryList = generateQueryList($(".js-queryList").val().split("\n"));
+      let queryList = generateQueryList($(".js-queryList").val().split("\n"));
 
       //set the loading counter for total queries
       const totalRequests = queryList.length;
