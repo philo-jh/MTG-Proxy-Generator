@@ -1,36 +1,3 @@
-////////////////////////////////////////////////////////
-//  Constant Values & Application State:
-////////////////////////////////////////////////////////
-
-const MODES = {
-  DISCLAIMER : "disclaimer",
-  EDIT : "edit",
-  REVIEW : "review"
-}
-
-const SCRYFALL_SEARCH_URL = "https://api.scryfall.com/cards/named";
-
-const sampleDecklist = `4 Thalia's Lieutenant
-4 Champion of the Parish
-3 Thalia, Guardian of Thraben
-1 Thalia, Heretic Cathar
-1 Thraben Inspector
-3 Phantasmal Image
-1 Dark Confidant
-4 Kitesail Freebooter
-1 Kessig Malcontents
-4 Noble Hierarch
-4 Mantis Rider
-3 Meddling Mage
-4 Reflector Mage
-4 Aether Vial
-4 Ancient Ziggurat
-4 Cavern of Souls
-4 Horizon Canopy
-1 Plains
-2 Seachrome Coast
-4 Unclaimed Territory`;
-
 let STATE = {
   mode : MODES.DISCLAIMER,
   deckList : null
@@ -228,12 +195,12 @@ function buildSpoiler(deckList) {
             ${(card.editMode) ? `<button class="next-button btn btn-dark btn-sm"> > </button>` : ""}
           </div>
 
-          <img src="${card.cardImage}" />`
+          <img src="${card.cardImage}" alt="${card.name}" />`
       
       cardFaceDiv1.html(divHTML);
       
       if(card.cardImage2) {
-        const div2html = `<img src="${card.cardImage2}" />`;
+        const div2html = `<img src="${card.cardImage2}" alt="${card.name}" />`;
         
         cardFaceDiv2.html(div2html);
       }
@@ -377,16 +344,6 @@ function checkQuantity(input) {
   }
 }
 
-function getDataFromScryFall(card, callback) {
-  const query = {
-    fuzzy : card.name
-  }
-  
-  $.getJSON(SCRYFALL_SEARCH_URL, query, callback).fail(function() {
-    callback({name : card.name});
-  });
-}
-
 function showDisclaimer() {
   $(".disclaimer").prop('hidden', false);
   $(".js-input-section").prop('hidden', true);
@@ -410,12 +367,12 @@ function showReviewScreen() {
 
 function editReviewButtons() {
   $(".edit-review").html(`
-    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+    <div class="btn-group btn-group-toggle" data-toggle="buttons" role="radiogroup" aria-label="navigate">
       <label class="btn btn-warning js-edit-button">
-        <input type="radio" name="options" id="option1" autocomplete="off" checked> Edit
+        <input type="radio" name="options" id="option1" autocomplete="off" aria-label="edit" checked> Edit
       </label>
       <label class="btn btn-info active js-review-button">
-        <input type="radio" name="options" id="option3" autocomplete="off" checked> Review
+        <input type="radio" name="options" id="option3" autocomplete="off" aria-label="review" checked> Review
       </label>
     </div>
   `);

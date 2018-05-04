@@ -15,39 +15,40 @@
   </head>
 
   <body class="text-center">
-
-    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    
+    <header class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column" role="banner">
+        <nav class="navbar navbar-light bg-light d-print-none" role="navigation" style="background-color: #e3f2fd;">
+          <a class="navbar-brand" href="index.html">
+            <img class = "home-icon" src="https://png.icons8.com/ios/50/000000/mana-filled.png" width="30" height="30" class="d-inline-block align-top" alt="">MTG Deck Tester</a>
+          <div class="edit-review"></div>
+        </nav>
+      </header>
       
-      <nav class="navbar navbar-light bg-light d-print-none" style="background-color: #e3f2fd;">
-        <a class="navbar-brand" href="index.html">
-          <img class = "home-icon" src="https://png.icons8.com/ios/50/000000/mana-filled.png" width="30" height="30" class="d-inline-block align-top" alt="">MTG Deck Tester</a>
-        <div class="edit-review"></div>
-      </nav>
+    <main class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column" role="main">
+      <section class="disclaimer jumbotron" role="region">
+        <h1 class="display-4">Print Proxy-Cards for Magic the Gathering</h1>
+        <p class="lead">This APP allows you to print test-versions of cards for the ultra-popular trading card game, Magic the Gathering. Playtest cards you are interested in before purchasing or protect valuable originals you already own.</p>
+        <hr class="my-4">
+        <button type="button" class="accept-terms btn btn-success btn-lg">Get Started</button>
+      </section>
 
-      <main class="inner cover">
-        <section class="disclaimer">
-          <div class="jumbotron">
-            <h1 class="display-4">Print Proxy-Cards for Magic the Gathering</h1>
-            <p class="lead">This APP allows you to print test-versions of cards for the ultra-popular trading card game, Magic the Gathering. Playtest cards you are interested in before purchasing or protect valuable originals you already own.</p>
-            <hr class="my-4">
-            <button type="button" class="accept-terms btn btn-success btn-lg">Get Started</button>
-          </div>
-        </section>
-        
-        <section class="js-input-section">
-          <form>
-            <textarea class="js-queryList form-control centered" placeholder-x=""></textarea>
-            <button class="btn btn-primary js-generate-button centered" type="submit">Generate</button>
-            <button class="btn btn-danger js-clear-button centered" type="button">Clear</button>
-          </form>
-        </section>
-        
-        <section class="js-results row no-gutters" aria-live="assertive">
-        </section>
-        
-      </main>
-      
-      <footer class="mastfoot mt-auto">
+      <section class="js-input-section" role="region">
+        <form>
+          <fieldset>
+            <legend>Enter your decklist below:</legend>
+            <textarea class="js-queryList form-control centered" placeholder-x="" role="textbox" aria-label="decklist"></textarea>
+          </fieldset>
+          <button class="btn btn-primary js-generate-button centered" type="submit">Generate</button>
+          <button class="btn btn-danger js-clear-button centered" type="button">Clear</button>
+        </form>
+      </section>
+
+      <section class="js-results row no-gutters" role="region" aria-live="assertive">
+      </section>
+
+    </main>
+
+    <footer class="mastfoot mt-auto" role="contentinfo">
         <div class="inner">
           <p>Read about WoTC's official stance on proxies <a href="https://magic.wizards.com/en/articles/archive/news/proxies-policy-and-communication-2016-01-14" target="blank">here</a>. You may not use this site for profit in any way. All images are property of WoTC and their respecitive artist.</p>
         </div>
@@ -59,7 +60,6 @@
           <p>Created by <a href="https://github.com/philo-jh">Jacob Houser</a>.</p>
         </div>
       </footer>
-    </div>
     
     <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -69,6 +69,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
   <script src="jquery.placeholder.js"></script>
-  <script src="lib/index.js"></script>
+  <script src="constants.js"></script>
+  <script src="client.js"></script>
+  <script src="index.js"></script>
   </body>
 </html>
