@@ -140,3 +140,7 @@ ul {
   margin-top: 0;
 }
 
+.card-face-div {
+  border-right: 1px solid grey;
+  border-bottom: 1px solid grey;
+}
