@@ -55,6 +55,8 @@ function renderApplication(state) {
         //query ScryFall for CURRENT card
         getDataFromScryFall(queryList[i], function(data) {
 
+          console.log("Scryfall data: ", data)
+
           const card = {}
 
           card.name = data.name;
@@ -64,8 +66,10 @@ function renderApplication(state) {
           card.editMode = false;
           card.printsUri = data.prints_search_uri;
 
+          console.log('card data: ', card)
+
           //update card images:
-          if(data.layout === "transform") {
+          if(data.card_faces.length === 2) {
 
               card.cardImage = (data.card_faces[0].image_uris) ? data.card_faces[0].image_uris.border_crop : ""
 
