@@ -69,7 +69,7 @@ function renderApplication(state) {
           console.log('card data: ', card)
 
           //update card images:
-          if(data.card_faces) {
+          if(data.hasOwnProperty(card_faces)) {
 
               card.cardImage = (data.card_faces[0].image_uris) ? data.card_faces[0].image_uris.border_crop : ""
 
