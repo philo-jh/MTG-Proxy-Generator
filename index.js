@@ -76,7 +76,7 @@ function renderApplication(state) {
               card.cardImage2 = (data.card_faces[1].image_uris) ? data.card_faces[1].image_uris.border_crop : "";
 
           } else {
-
+            console.log("card does not have property 'card_faces');
             card.cardImage = (data.image_uris) ? data.image_uris.border_crop : "";
 
           }
