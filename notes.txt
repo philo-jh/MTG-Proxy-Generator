@@ -1,0 +1,33 @@
+*** DATA ***
+
+standard card:
+card width = 235px
+card height = 329px
+
+checklist card image half (rotated sideways):
+height = 235px
+width = 164.5px
+
+*** IMPLEMENT IN CODE ***
+
+card-face-div = width 235px
+card-face-div = height 329px
+
+checklist card(front face):
+  width: 164.5px;
+  height: 235px;
+  transform: rotate(270deg);
+  position: relative;
+  top: 34px;
+  left: 35px;
+  border-bottom: 1px solid grey;
+  border-left: 1px solid grey;
+
+checklist card(back face):
+  width: 164.5px; 
+  height: 235px;
+  transform: rotate(270deg);
+  position: relative;
+  left: 35px;
+  top: 104px;
+  border-bottom: 1px solid grey;
