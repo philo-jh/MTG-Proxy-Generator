@@ -19,8 +19,12 @@
   
   .card-face-div {
     page-break-inside: avoid;
-    width: 2.45in;
     display:inline-block;
+  }
+
+  .normal {
+    height: 329px;
+    width: 235px;
   }
   
   .js-results.row {
