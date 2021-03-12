@@ -55,8 +55,6 @@ function renderApplication(state) {
         //query ScryFall for CURRENT card
         getDataFromScryFall(queryList[i], function(data) {
 
-          console.log("Scryfall data: ", data)
-
           const card = {}
 
           card.name = data.name;
@@ -65,11 +63,10 @@ function renderApplication(state) {
           card.alternateImages = null;
           card.editMode = false;
           card.printsUri = data.prints_search_uri;
-
-          console.log('card data: ', card)
+          card.layout = queryList[i].layout
 
           //update card images:
-          if(data.hasOwnProperty('card_faces')) {
+          if (data.layout == 'transform' || data.layout == 'modal_dfc') {
             card.cardImage = (data.card_faces[0].image_uris) ? data.card_faces[0].image_uris.border_crop : "";
             card.cardImage2 = (data.card_faces[1].image_uris) ? data.card_faces[1].image_uris.border_crop : "";
 
@@ -165,20 +162,18 @@ function buildSpoiler(deckList) {
         $(".js-results").append(`
         <div class="card-face-div col-6 col-sm-4 col-md-3 col-lg-2" data-card="${card.name}-${i}">
         </div>
-      `);
-        
-      
+        `);
       }
       
       cardFaceDivs = $(`*[data-card="${card.name}-${i}"]`);
       
     }
       
-      cardFaceDiv1 = $(cardFaceDivs[0]);
-      
-      if(cardFaceDivs.length > 1) {
-        cardFaceDiv2 = $(cardFaceDivs[1]);
-      }
+    cardFaceDiv1 = $(cardFaceDivs[0]);
+    
+    if(cardFaceDivs.length > 1) {
+      cardFaceDiv2 = $(cardFaceDivs[1]);
+    }
     
     if(card.needsRerender) {
       const divHTML = `
@@ -193,16 +188,24 @@ function buildSpoiler(deckList) {
             ${(card.editMode) ? `<span class="badge badge-dark image-counter"><span class="image-counter-current">${card.alternateImages.map(item => item.cardImage).indexOf(card.cardImage) + 1}</span> / <span class="image-counter-total">${card.alternateImages.length}</span></span>` : `<button class="edit-button btn btn-outline-light btn-sm">Edit</button>`}
 
             ${(card.editMode) ? `<button class="next-button btn btn-dark btn-sm"> > </button>` : ""}
-          </div>
-
-          <img src="${card.cardImage}" alt="${card.name}" />`
+          </div>`
       
       cardFaceDiv1.html(divHTML);
-      
-      if(card.cardImage2) {
-        const div2html = `<img src="${card.cardImage2}" alt="${card.name}" />`;
-        
-        cardFaceDiv2.html(div2html);
+
+      if(card.layout === 'normal') {
+        cardFaceDiv1.append(`<img class="normal" src="${card.cardImage}" alt="${card.name}" />`)
+        if(card.cardImage2) {
+          const div2html = `<img class="normal" src="${card.cardImage2}" alt="${card.name}" />`;
+          cardFaceDiv2.html(div2html);
+        }
+      }
+
+      if (card.layout === 'checklist') {
+        cardFaceDiv1.append(`<img class="checklist-front" src="${card.cardImage}" alt="${card.name}" />`)
+        if (card.cardImage2) {
+          const div2html = `<img class="checklist-back" src="${card.cardImage2}" alt="${card.name}" />`;
+          cardFaceDiv2.html(div2html);
+        }
       }
       
       $(".edit-button", cardFaceDiv1).click(function() {
@@ -304,15 +307,23 @@ function generateQueryList(arr) {
   const queryList = [];
   
   for(let i = 0; i < arr.length; i++) {
-    
-    const cardName = arr[i].replace(/[0-9]/g, '').trim().toLowerCase();
-    
-    if(!(cardName === "")) {
-      
-      queryList.push({
-        name : cardName,
-        quantity : checkQuantity(arr[i])
-      });
+    const query = {};
+    let queryText = arr[i].replace(/[0-9]/g, '').trim().toLowerCase();
+
+    if(queryText) {
+      if (queryText.includes('-cl')) {
+        query.layout = 'checklist';
+        queryText = queryText.replace('-cl', '');
+      } else {
+        query.layout = 'normal'
+      }
+
+      if (queryText) {
+        query.name = queryText
+        query.quantity = checkQuantity(arr[i])
+      }
+
+      queryList.push(query);
     }
   }
   
