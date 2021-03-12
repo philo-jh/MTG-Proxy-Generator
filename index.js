@@ -43,8 +43,6 @@ function renderApplication(state) {
       //generate a list of query...
       let queryList = generateQueryList($(".js-queryList").val().split("\n"));
 
-      console.log('queryList = ', queryList)
-
       //set the loading counter for total queries
       const totalRequests = queryList.length;
 
@@ -57,9 +55,6 @@ function renderApplication(state) {
         //query ScryFall for CURRENT card
         getDataFromScryFall(queryList[i], function(data) {
 
-          console.log(`queryList[${i}] = `, queryList[i])
-          console.log("Scryfall data: ", data)
-
           const card = {}
 
           card.name = data.name;
@@ -69,8 +64,6 @@ function renderApplication(state) {
           card.editMode = false;
           card.printsUri = data.prints_search_uri;
           card.layout = queryList[i].layout
-
-          console.log('card data: ', card)
 
           //update card images:
           if (data.layout == 'transform' || data.layout == 'modal_dfc') {
@@ -151,8 +144,6 @@ function buildSpoiler(deckList) {
   for(let i = 0; i < deckList.length; i++) {
     
     const card = deckList[i];
-
-    console.log('card = ', card);
     
     let cardFaceDivs = $(`*[data-card="${card.name}-${i}"]`);
     
