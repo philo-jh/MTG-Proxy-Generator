@@ -73,7 +73,7 @@ function renderApplication(state) {
           console.log('card data: ', card)
 
           //update card images:
-          if (data.hasOwnProperty('card_faces') && data.layout !== 'adventure' && data.layout !== 'split') {
+          if (data.layout == 'transform' || data.layout == 'modal_dfc') {
             card.cardImage = (data.card_faces[0].image_uris) ? data.card_faces[0].image_uris.border_crop : "";
             card.cardImage2 = (data.card_faces[1].image_uris) ? data.card_faces[1].image_uris.border_crop : "";
 
