@@ -111,7 +111,6 @@ function renderApplication(state) {
             renderApplication(STATE);
           }
         }), 50);
-        console.log("State's decklist: ", STATE.deckList);
       }
         
       STATE.mode = MODES.REVIEW;
@@ -201,11 +200,9 @@ function buildSpoiler(deckList) {
     }
     
     cardDiv1 = $(cardDivs[0])
-    console.log('cardDiv1 = ', cardDiv1)
 
     if(cardDivs.length > 1) {
       cardDiv2 = $(cardDivs[1])
-      console.log('cardDiv2 = ', cardDiv2)
     }
     
     if(card.needsRerender) {
@@ -348,14 +345,10 @@ function generateQueryList(userInputArr) {
   for(let i = 0; i < userInputArr.length; i++) {
     const query = {};
     let currentItem = userInputArr[i]
-    console.log('1. currentItem is: ', currentItem)
-
     //check quantity and store in query object:
     query.quantity = checkQuantity(currentItem)
-    console.log('2. query is: ', query)
     //remove quantity from currentItem
     currentItem = currentItem.replace(/^([0-9]+)/g, '').trim();
-    console.log('3. currentItem is: ', currentItem)
     //check for flags:
 
     //check for 'checklist' flag
@@ -368,8 +361,6 @@ function generateQueryList(userInputArr) {
     } else {
       query.layout = 'normal'
     }
-    console.log('4. query is: ', query)
-    console.log('5. currentItem is: ', currentItem)
 
     // check for 'code' flag
     if(currentItem.includes('-code')) {
@@ -381,18 +372,16 @@ function generateQueryList(userInputArr) {
       currentItem = currentItem.replace('-cd', '').trim()
       query.queryEndpoint = 'code';
     }
-    console.log('6. query is: ', query)
-    console.log('7. currentItem is: ', currentItem)
 
     // if the endpoint hasn't been assigned by a flag, it's a standard query
 
     if(!query.queryEndpoint) {
       query.queryEndpoint = 'named'
     }
-    console.log('8. currentItem is: ', currentItem)
     query.query = currentItem.trim().toLowerCase();
-    console.log('9. query is: ', query)
+    console.log(`query #${i} before being pushed is: `, query)
     queryList.push(query);
+    console.log(`queryList #${i} is: `, queryList[i])
   }
   
   for(let i = 0; i < queryList.length; i++) {
@@ -403,7 +392,7 @@ function generateQueryList(userInputArr) {
       
       let nextCard = queryList[j];
       
-      while((j < queryList.length) && (currentCard.name === nextCard.name)) {
+      while((j < queryList.length) && (currentCard.query === nextCard.query) && (currentCard.layout === nextCard.layout)) {
         currentCard.quantity += nextCard.quantity;
         queryList.splice(j, 1);
         nextCard = queryList[j];
