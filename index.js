@@ -376,6 +376,11 @@ function generateQueryList(userInputArr) {
       currentItem = currentItem.replace('-code', '').trim()
       query.queryEndpoint = 'code';
     }
+
+    if (currentItem.includes('-cd')) {
+      currentItem = currentItem.replace('-cd', '').trim()
+      query.queryEndpoint = 'code';
+    }
     console.log('6. query is: ', query)
     console.log('7. currentItem is: ', currentItem)
 
