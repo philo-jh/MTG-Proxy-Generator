@@ -42,7 +42,7 @@ function renderApplication(state) {
 
       //generate a list of query...
       let queryList = generateQueryList($(".js-queryList").val().split("\n"));
-
+      console.log('queryList is: ', queryList)
       //set the loading counter for total queries
       const totalRequests = queryList.length;
 
@@ -341,29 +341,53 @@ function buildSpoiler(deckList) {
   }
 }
 
-function generateQueryList(arr) {
+function generateQueryList(userInputArr) {
   
   const queryList = [];
   
-  for(let i = 0; i < arr.length; i++) {
+  for(let i = 0; i < userInputArr.length; i++) {
     const query = {};
-    let queryText = arr[i].replace(/[0-9]/g, '').trim().toLowerCase();
+    let currentItem = userInputArr[i]
+    console.log('1. currentItem is: ', currentItem)
 
-    if(queryText) {
-      if (queryText.includes('-cl')) {
-        query.layout = 'checklist';
-        queryText = queryText.replace('-cl', '');
-      } else {
-        query.layout = 'normal'
-      }
+    //check quantity and store in query object:
+    query.quantity = checkQuantity(currentItem)
+    console.log('2. query is: ', query)
+    //remove quantity from currentItem
+    currentItem = currentItem.replace(/^([0-9]+)/g, '').trim();
+    console.log('3. currentItem is: ', currentItem)
+    //check for flags:
 
-      if (queryText) {
-        query.name = queryText
-        query.quantity = checkQuantity(arr[i])
-      }
-
-      queryList.push(query);
+    //check for 'checklist' flag
+    if (currentItem.includes('-cl')) {
+      query.layout = 'checklist';
+      currentItem = currentItem.replace('-cl', '').trim();
+    } else if (currentItem.includes('-checklist')) {
+      query.layout = 'checklist';
+      currentItem = currentItem.replace('-checklist', '').trim();
+    } else {
+      query.layout = 'normal'
     }
+    console.log('4. query is: ', query)
+    console.log('5. currentItem is: ', currentItem)
+
+    // check for 'code' flag
+    if(currentItem.includes('-code')) {
+      currentItem = currentItem.replace('-code', '').trim()
+      query.queryEndpoint = 'code';
+    }
+    console.log('6. query is: ', query)
+    console.log('7. currentItem is: ', currentItem)
+
+    // if the endpoint hasn't been assigned by a flag, it's a standard query
+
+    if(!query.queryEndpoint) {
+      query.queryEndpoint = 'named'
+    }
+    console.log('8. currentItem is: ', currentItem)
+    query.query = currentItem.trim().toLowerCase();
+    console.log('9. query is: ', query)
+    queryList.push(query);
   }
   
   for(let i = 0; i < queryList.length; i++) {
@@ -385,12 +409,12 @@ function generateQueryList(arr) {
   return queryList;
 }
 
-function checkQuantity(input) {
-  input = parseInt(input);
-  if(isNaN(input)) {
+function checkQuantity(userQuery) {
+  userQuery = parseInt(userQuery);
+  if(isNaN(userQuery)) {
     return 1;
   } else {
-    return input;
+    return userQuery;
   }
 }
 
