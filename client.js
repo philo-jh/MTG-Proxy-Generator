@@ -1,9 +1,17 @@
 function getDataFromScryFall(card, callback) {
-  const query = {
-    fuzzy : card.name
+
+  if(card.queryEndpoint === 'code') {
+    $.get(SCRYFALL_SEARCH_URL + card.query,
+      callback
+    ).fail(function() {
+      callback({name: card.query})
+    })
+  } else {
+    $.getJSON(SCRYFALL_SEARCH_URL + card.queryEndpoint,
+      { fuzzy: card.query },
+      callback
+    ).fail(function () {
+      callback({ name: card.query });
+    })
   }
-  
-  $.getJSON(SCRYFALL_SEARCH_URL, query, callback).fail(function() {
-    callback({name : card.name});
-  });
 }

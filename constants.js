@@ -4,7 +4,7 @@ const MODES = {
   REVIEW : "review"
 }
 
-const SCRYFALL_SEARCH_URL = "https://api.scryfall.com/cards/named";
+const SCRYFALL_SEARCH_URL = "https://api.scryfall.com/cards/";
 
 const syntaxText = `Black Lotus (single card)
 4 Counterspell (creates 4 cards)
