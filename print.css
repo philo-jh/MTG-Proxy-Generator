@@ -17,14 +17,13 @@
     margin-right: 0;
   }
   
-  .card-face-div {
+  .card-div {
+    width: 235px;
+    height: 329px;
     page-break-inside: avoid;
     display:inline-block;
-  }
-
-  .normal {
-    height: 329px;
-    width: 235px;
+    border-right: 1px solid grey;
+    border-bottom: 1px solid grey;
   }
   
   .js-results.row {
@@ -32,5 +31,4 @@
     width: 100%;
     font-size: 0;
   }
-  
 }

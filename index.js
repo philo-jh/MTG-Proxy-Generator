@@ -24,7 +24,7 @@ function renderApplication(state) {
   else if(state.mode === MODES.EDIT) {
     
     $(".js-queryList").attr("placeholder-x", 
-`Enter a decklist here in MTGO format:\n\nHere's an example decklist:\n\n(Click 'Generate' to build this deck)\n\n` + sampleDecklist);
+`Supported syntax:\n\n` + syntaxText);
     
     $(".js-queryList").placeholder();
     
@@ -53,8 +53,7 @@ function renderApplication(state) {
 
       for(let i=0; i < queryList.length; i++) {
         //query ScryFall for CURRENT card
-        getDataFromScryFall(queryList[i], function(data) {
-
+        setTimeout(getDataFromScryFall(queryList[i], function (data) {
           const card = {}
 
           card.name = data.name;
@@ -69,22 +68,29 @@ function renderApplication(state) {
           if (data.layout == 'transform' || data.layout == 'modal_dfc') {
             card.cardImage = (data.card_faces[0].image_uris) ? data.card_faces[0].image_uris.border_crop : "";
             card.cardImage2 = (data.card_faces[1].image_uris) ? data.card_faces[1].image_uris.border_crop : "";
-
           } else {
+            if(card.layout === 'checklist') {
+              card.layout = 'normal';
+              $(".js-results").prepend(`<div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
+              "${card.name}" cannot be made into a checklist card. Generating standard card instead.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>`);
+            }
             card.cardImage = (data.image_uris) ? data.image_uris.border_crop : "";
           }
 
           completedRequests++;
-
           let percentageComplete = (completedRequests / totalRequests) * 100;
 
           $(".progress-bar").css("width", `${percentageComplete}%`).attr("aria-valuenow", `${percentageComplete}`);
 
           card.needsRerender = true;
-          
-          if(card.cardImage!=="") {
+
+          if (card.cardImage !== "") {
             //push the cards into the deckList:
-            for(let j =0; j < queryList[i].quantity; j++) {
+            for (let j = 0; j < queryList[i].quantity; j++) {
               const myTempCard = $.extend(true, {}, card);
               STATE.deckList.push(myTempCard);
             }
@@ -96,15 +102,16 @@ function renderApplication(state) {
               </button>
             </div>`);
           }
-          
-          if(completedRequests === queryList.length) {
-            STATE.deckList = STATE.deckList.sort(function(card1, card2) {
+
+          if (completedRequests === queryList.length) {
+            STATE.deckList = STATE.deckList.sort(function (card1, card2) {
               return card1.displayOrder - card2.displayOrder;
             });
 
             renderApplication(STATE);
           }
-        });
+        }), 50);
+        console.log("State's decklist: ", STATE.deckList);
       }
         
       STATE.mode = MODES.REVIEW;
@@ -144,72 +151,104 @@ function buildSpoiler(deckList) {
   for(let i = 0; i < deckList.length; i++) {
     
     const card = deckList[i];
+    let cardDivs, cardDiv1, cardDiv2
     
-    let cardFaceDivs = $(`*[data-card="${card.name}-${i}"]`);
+    // find existing cardDiv(s)
+    cardDivs = $(`*[data-card="${card.name}-${i}"].card-div`);
     
-    let cardFaceDiv1, cardFaceDiv2;
-    
-    if(cardFaceDivs.length === 0) {
+    // if there are no matching cardDivs this is a new card, so let's create one
+    if(cardDivs.length === 0) {
       
-      cardFaceDiv1 = $();
+      // cardDiv1 = $();
       
-      $(".js-results").append(`
-        <div class="card-face-div col-6 col-sm-4 col-md-3 col-lg-2" data-card="${card.name}-${i}">
-        </div>
-      `);
-      
-      if(card.cardImage2) {
+      // make 2 cardDivs for a 'normal' DFC
+      if(card.cardImage2 && card.layout !== 'checklist') {
         $(".js-results").append(`
-        <div class="card-face-div col-6 col-sm-4 col-md-3 col-lg-2" data-card="${card.name}-${i}">
+        <div class="card-div col-6 col-sm-4 col-md-3 col-lg-2" data-card="${card.name}-${i}">
+          <div class="card-overlay d-print-none">
+            <button class="edit-button btn btn-outline-light btn-sm">Edit</button>
+          </div>
+          <img class="normal">
         </div>
-        `);
+
+        <div class="card-div col-6 col-sm-4 col-md-3 col-lg-2" data-card="${card.name}-${i}">
+          <img>
+        </div>`);
+        // else make a single cardDiv with checklist style img elements
+      } else if(card.cardImage2 && card.layout === 'checklist') {
+        // Need to add an img.normal for print-sizing reasons...
+        $(".js-results").append(`
+        <div class="card-div checklist col-6 col-sm-4 col-md-3 col-lg-2" data-card="${card.name}-${i}">
+          <div class="card-overlay d-print-none">
+            <button class="edit-button btn btn-outline-light btn-sm">Edit</button>
+          </div>
+          <img class="normal">
+          <img class="checklist checklist-front">
+          <img class="checklist-back">
+        </div>`);
+        // else make a single cardDiv for all other styles of cards
+      } else {
+        $(".js-results").append(`
+        <div class="card-div col-6 col-sm-4 col-md-3 col-lg-2" data-card="${card.name}-${i}">
+          <div class="card-overlay d-print-none">
+            <button class="edit-button btn btn-outline-light btn-sm">Edit</button>
+          </div>
+          <img>
+        </div>`);
       }
-      
-      cardFaceDivs = $(`*[data-card="${card.name}-${i}"]`);
-      
+      //now there is at least one cardDiv, so lets save them
+      cardDivs = $(`*[data-card="${card.name}-${i}"].card-div`);
     }
-      
-    cardFaceDiv1 = $(cardFaceDivs[0]);
     
-    if(cardFaceDivs.length > 1) {
-      cardFaceDiv2 = $(cardFaceDivs[1]);
+    cardDiv1 = $(cardDivs[0])
+    console.log('cardDiv1 = ', cardDiv1)
+
+    if(cardDivs.length > 1) {
+      cardDiv2 = $(cardDivs[1])
+      console.log('cardDiv2 = ', cardDiv2)
     }
     
     if(card.needsRerender) {
-      const divHTML = `
-          <div class="card-overlay d-print-none ${(card.editMode) ? `edit-mode` : ""}">
+      // edit mode overlay
+      const cardOverlayHTML = `
+        <div class="card-overlay d-print-none ${(card.editMode) ? `edit-mode` : ""}">
 
-            ${(card.editMode) ? `<span class="set-name badge badge-dark">${card.set}</span>` : ""}
+          ${(card.editMode) ? `<span class="set-name badge badge-dark">${card.set}</span>` : ""}
 
-            ${(card.editMode) ? `<button class="done-button btn btn-outline-light btn-sm">Done</button>` : ""}
-            
-            ${(card.editMode) ? `<button class="prev-button btn btn-dark btn-sm"> < </button>` : ""}
+          ${(card.editMode) ? `<button class="done-button btn btn-outline-light btn-sm">Done</button>` : ""}
+          
+          ${(card.editMode) ? `<button class="prev-button btn btn-dark btn-sm"> < </button>` : ""}
 
-            ${(card.editMode) ? `<span class="badge badge-dark image-counter"><span class="image-counter-current">${card.alternateImages.map(item => item.cardImage).indexOf(card.cardImage) + 1}</span> / <span class="image-counter-total">${card.alternateImages.length}</span></span>` : `<button class="edit-button btn btn-outline-light btn-sm">Edit</button>`}
+          ${(card.editMode) ? `<span class="badge badge-dark image-counter"><span class="image-counter-current">${card.alternateImages.map(item => item.cardImage).indexOf(card.cardImage) + 1}</span> / <span class="image-counter-total">${card.alternateImages.length}</span></span>` : `<button class="edit-button btn btn-outline-light btn-sm">Edit</button>`}
 
-            ${(card.editMode) ? `<button class="next-button btn btn-dark btn-sm"> > </button>` : ""}
-          </div>`
+          ${(card.editMode) ? `<button class="next-button btn btn-dark btn-sm"> > </button>` : ""}
+        </div>`;
       
-      cardFaceDiv1.html(divHTML);
+      //set html of layover in cardDiv
+      cardDiv1.find('.card-overlay').replaceWith(cardOverlayHTML);
 
+      // add normal card face images
       if(card.layout === 'normal') {
-        cardFaceDiv1.append(`<img class="normal" src="${card.cardImage}" alt="${card.name}" />`)
+        cardDiv1.find('img').replaceWith(`<img class="normal" src="${card.cardImage}" alt="${card.name}">`)
         if(card.cardImage2) {
-          const div2html = `<img class="normal" src="${card.cardImage2}" alt="${card.name}" />`;
-          cardFaceDiv2.html(div2html);
+          cardDiv2.find('img').replaceWith(`<img class="normal" src="${card.cardImage2}" alt="${card.name}">`);
         }
       }
 
+      //add checklist card face images
       if (card.layout === 'checklist') {
-        cardFaceDiv1.append(`<img class="checklist-front" src="${card.cardImage}" alt="${card.name}" />`)
+        if(card.cardImage) {
+          // Need this 'normal' image for print-sizing reasons...
+          cardDiv1.find('img.normal').replaceWith(`<img class="normal" src="${card.cardImage}" alt="${card.name}">`);
+          cardDiv1.find('img.checklist-front').replaceWith(`<img class="checklist-front" src="${card.cardImage}" alt="${card.name}">`);
+        }
         if (card.cardImage2) {
-          const div2html = `<img class="checklist-back" src="${card.cardImage2}" alt="${card.name}" />`;
-          cardFaceDiv2.html(div2html);
+          cardDiv1.find('img.checklist-back').replaceWith(`<img class="checklist-back" src="${card.cardImage2}" alt="${card.name}">`);
         }
       }
       
-      $(".edit-button", cardFaceDiv1).click(function() {
-        card.editMode = true; 
+      $(".edit-button", cardDiv1).click(function() {
+        card.editMode = true;
         
         $(this).parent().css("opacity", "1");
         
@@ -410,7 +449,6 @@ function addProgressBar() {
     </div>
   `);
 }
-
 
 $(function() {
   renderApplication(STATE);
