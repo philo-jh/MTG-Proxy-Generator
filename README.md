@@ -2,8 +2,8 @@
 ## Try the Live App Below:
 [MTG Proxy-Generator](https://philo-jh.github.io/MTG-Proxy-Generator/)
 ## Syntax:
-MTGO Format:
-Black Lotus
+MTGO Format:  
+Black Lotus   
 4 Counterspell
 
 ## Flags:
