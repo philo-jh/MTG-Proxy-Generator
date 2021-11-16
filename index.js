@@ -66,8 +66,8 @@ function renderApplication(state) {
 
           //update card images:
           if (data.layout == 'transform' || data.layout == 'modal_dfc') {
-            card.cardImage = (data.card_faces[0].image_uris) ? data.card_faces[0].image_uris.border_crop : "";
-            card.cardImage2 = (data.card_faces[1].image_uris) ? data.card_faces[1].image_uris.border_crop : "";
+            card.cardImage = (data.card_faces[0].image_uris) ? data.card_faces[0].image_uris.png : "";
+            card.cardImage2 = (data.card_faces[1].image_uris) ? data.card_faces[1].image_uris.png : "";
           } else {
             if(card.layout === 'checklist') {
               card.layout = 'normal';
@@ -78,7 +78,7 @@ function renderApplication(state) {
               </button>
             </div>`);
             }
-            card.cardImage = (data.image_uris) ? data.image_uris.border_crop : "";
+            card.cardImage = (data.image_uris) ? data.image_uris.png : "";
           }
 
           completedRequests++;
